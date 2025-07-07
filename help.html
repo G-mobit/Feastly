@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Feastly Help & Support</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      min-height: 100vh;
+      color: #333;
+      background: #fafafa;
+    }
+    nav#sidebar {
+      width: 240px;
+      background: #d35400;
+      color: white;
+      padding: 1.5rem;
+      box-sizing: border-box;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    nav#sidebar h2 {
+      margin-top: 0;
+      font-size: 1.5rem;
+      border-bottom: 1px solid #e67e22;
+      padding-bottom: 0.5rem;
+    }
+    nav#sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0 0 0;
+    }
+    nav#sidebar ul li {
+      margin-bottom: 1rem;
+    }
+    nav#sidebar ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    nav#sidebar ul li a:hover,
+    nav#sidebar ul li a:focus {
+      text-decoration: underline;
+      outline: none;
+    }
+    main#content {
+      flex: 1;
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      background: white;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      border-radius: 6px;
+    }
+    h1 {
+      color: #d35400;
+      margin-top: 0;
+    }
+    h2 {
+      color: #e67e22;
+      margin-top: 2rem;
+      border-bottom: 2px solid #e67e22;
+      padding-bottom: 0.3rem;
+    }
+    p {
+      line-height: 1.6;
+    }
+    ul {
+      margin-left: 1.2rem;
+      margin-bottom: 1rem;
+    }
+    a.policy-link {
+      color: #d35400;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    a.policy-link:hover, a.policy-link:focus {
+      text-decoration: underline;
+      outline: none;
+    }
+    form#feedbackForm {
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      max-width: 500px;
+    }
+    form#feedbackForm label {
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+    form#feedbackForm input[type="text"],
+    form#feedbackForm input[type="email"],
+    form#feedbackForm textarea {
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+      resize: vertical;
+      font-family: inherit;
+    }
+    form#feedbackForm button {
+      background-color: #d35400;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      align-self: flex-start;
+    }
+    form#feedbackForm button:hover,
+    form#feedbackForm button:focus {
+      background-color: #e67e22;
+      outline: none;
+    }
+    footer {
+      margin: 3rem 0 1rem 0;
+      font-size: 0.9rem;
+      color: #999;
+      text-align: center;
+    }
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+      nav#sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding-bottom: 1rem;
+      }
+      main#content {
+        margin: 1rem;
+        max-width: 100%;
+      }
+    }
+    .contact-card {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      max-width: 400px;
+      margin: 20px auto;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      font-family: Arial, sans-serif;
+      color: #333;
+    }
+    .contact-card h1,
+    .contact-card h3 {
+      margin-top: 0;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+    .contact-card p {
+      font-size: 1rem;
+      margin-bottom: 15px;
+    }
+    .contact-card a {
+      display: block;
+      color: #0077cc;
+      text-decoration: none;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    .contact-card a:hover,
+    .contact-card a:focus {
+      text-decoration: underline;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <nav id="sidebar" aria-label="Help Navigation">
+    <h2>Help & Support</h2>
+    <ul>
+      <li><a href="#faqs">FAQs</a></li>
+      <li><a href="#contact-info">Contact Information</a></li>
+      <li><a href="#support-hours">Support Hours & Response Time</a></li>
+      <li><a href="#refund-policy">Refund & Cancellation Policy</a></li>
+      <li><a href="#how-to-guides">How-To Guides / Tutorials</a></li>
+      <li><a href="#troubleshooting">Troubleshooting Tips</a></li>
+      <li><a href="#community">Community / Forums / Chat</a></li>
+      <li><a href="#feedback-form">Feedback & Suggestions Form</a></li>
+      <li><a href="#accessibility">Accessibility Information</a></li>
+      <li><a href="#policies">Important Policies</a></li>
+    </ul>
+  </nav>
+
+  <main id="content" tabindex="-1">
+    <h1>Feastly Help & Support</h1>
+
+    <section id="faqs" tabindex="0">
+      <h2>1. FAQs (Frequently Asked Questions)</h2>
+      <h3>Q: How do I search for recipes?</h3>
+      <p>Use the search bar at the top of the page to enter keywords related to the recipe you want to find.</p>
+
+      <h3>Q: What categories of recipes are available?</h3>
+      <p>We offer Breakfast, Lunch, Dinner, and Dessert categories, each with curated recipes.</p>
+
+      <h3>Q: How do I watch recipe videos?</h3>
+      <p>Click the play button on the recipe card's video thumbnail. Free users can watch one video per month.</p>
+
+      <h3>Q: How do I subscribe to Premium?</h3>
+      <p>Click the "Go Premium" button in the header or any prompt to access our subscription page.</p>
+
+      <h3>Q: Can I cancel my subscription?</h3>
+      <p>Yes, see our Refund & Cancellation Policy below for details on cancellation and refunds.</p>
+
+      <h3>Q: What payment methods are accepted?</h3>
+      <p>We accept all major credit cards and PayPal for Premium subscriptions.</p>
+    </section>
+
+    <section id="contact-info" tabindex="0" role="region" aria-label="Contact information">
+      <div class="contact-card" role="main" aria-label="Contact information">
+        <h1>Contact Us</h1>
+        <p>If you need help, contact us on these:</p>
+        <a href="mailto:gomato253@gmail.com" aria-label="Email: gomato253@gmail.com">Email: gomato253@gmail.com</a><br />
+        <a href="https://wa.me/7042362750" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp number +91 7042362750">WhatsApp: +91 7042362750</a><br />
+        <a href="https://instagram.com/fea.stly" target="_blank" rel="noopener noreferrer" aria-label="Instagram profile Feastly">Instagram: Feastly</a>
+      </div>
+    </section>
+
+    <section id="support-hours" tabindex="0">
+      <h2>3. Support Hours & Response Time</h2>
+      <p>Our support team is available:</p>
+      <ul>
+        <li><strong>Monday - Friday:</strong> 9:00 AM to 6:00 PM (local time)</li>
+        <li><strong>Saturday - Sunday:</strong> Limited support</li>
+      </ul>
+      <p>Typical response time: within 24 hours on business days.</p>
+    </section>
+
+    <section id="refund-policy" tabindex="0">
+      <h2>4. Refund & Cancellation Policy</h2>
+      <p>To request a refund or cancel your Premium subscription, please follow these steps:</p>
+      <ol>
+        <li>Contact support at <a href="mailto:support@feastly.com">support@feastly.com</a> with your account details.</li>
+        <li>Include the reason for refund or cancellation.</li>
+        <li>Our team will review and respond within 3 business days.</li>
+      </ol>
+      <p><strong>Eligibility:</strong> Refunds are generally provided within 7 days of purchase for unused subscriptions.</p>
+      <p>For cancellations, your subscription will remain active until the end of the billing period.</p>
+    </section>
+
+    <section id="how-to-guides" tabindex="0">
+      <h2>5. How-To Guides / Tutorials</h2>
+      <ul>
+        <li><strong>Using the Site:</strong> Select categories or search for recipes using the search bar.</li>
+        <li><strong>Subscribing to Newsletter:</strong> Enter your email in the newsletter box at the bottom of the page and click Subscribe.</li>
+        <li><strong>Submitting Feedback:</strong> Use the form below to send us suggestions or report issues.</li>
+      </ul>
+    </section>
+
+    <section id="troubleshooting" tabindex="0">
+      <h2>6. Troubleshooting Tips</h2>
+      <ul>
+        <li><strong>Login Issues:</strong> Ensure you use the correct email and password. Use password reset if needed.</li>
+        <li><strong>Subscription Errors:</strong> Check your payment method and try again or contact support.</li>
+        <li><strong>Video Playback Problems:</strong> Verify your internet connection and try opening videos in a new tab.</li>
+        <li><strong>Page Not Loading:</strong> Clear your browser cache and refresh the page.</li>
+      </ul>
+    </section>
+
+    <section id="community" tabindex="0">
+      <h2>7. Community / Forums / Chat</h2>
+      <p>Join our community forums to discuss recipes, share tips, and get help from other users:</p>
+      <ul>
+        <li><a href="https://community.feastly.com" target="_blank" rel="noopener">Feastly Community Forums</a></li>
+        <li><a href="https://discord.gg/feastly" target="_blank" rel="noopener">Join our Discord Chat</a></li>
+      </ul>
+    </section>
+
+    <section id="feedback-form" tabindex="0">
+      <h2>8. Feedback & Suggestions Form</h2>
+      <form
+        id="feedbackForm"
+        aria-label="Feedback and Suggestions Form"
+        action="https://formspree.io/f/xpwrnely"  
+        method="POST"
+      >
+        <label for="name">Name (optional):</label>
+        <input type="text" id="name" name="name" placeholder="Your name" />
+
+        <label for="email">Email (optional):</label>
+        <input type="email" id="email" name="email" placeholder="your.email@example.com" />
+
+        <label for="message">Message (required):</label>
+        <textarea
+          id="message"
+          name="message"
+          rows="5"
+          placeholder="Your feedback or suggestion"
+          required
+        ></textarea>
+
+        <button type="submit">Submit</button>
+      </form>
+      <p
+        id="feedbackResponse"
+        role="alert"
+        aria-live="polite"
+        style="color: green; margin-top: 1rem;"
+      ></p>
+    </section>
+
+    <section id="accessibility" tabindex="0">
+      <h2>9. Accessibility Information</h2>
+      <p>Feastly is committed to providing an accessible experience for all users:</p>
+      <ul>
+        <li>Keyboard navigation enabled throughout the site.</li>
+        <li>All images include alt text for screen readers.</li>
+        <li>High-contrast color options available in user settings.</li>
+        <li>Video captions and transcripts available for all recipe videos.</li>
+      </ul>
+      <p>If you have accessibility feedback or need assistance, please contact us via the feedback form or email.</p>
+    </section>
+
+    <section id="policies" tabindex="0">
+      <h2>10. Important Policies</h2>
+      <h3>Privacy Policy</h3>
+      <p>We respect your privacy and protect your data. Read our full <a href="/privacy-policy.html" class="policy-link">Privacy Policy</a>.</p>
+
+      <h3>Terms of Service</h3>
+      <p>Using Feastly means you agree to our <a href="/terms-of-service.html" class="policy-link">Terms of Service</a>.</p>
+
+      <h3>Cookie Policy</h3>
+      <p>We use cookies to enhance your experience. See our <a href="/cookie-policy.html" class="policy-link">Cookie Policy</a> for details.</p>
+    </section>
+
+    <footer>
+      &copy; 2025 Feastly. All rights reserved.
+    </footer>
+  </main>
+
+  <script>
+    // Smooth scrolling for sidebar navigation (optional)
+    document.querySelectorAll('nav#sidebar a').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href').substring(1);
+        const targetSection = document.getElementById(targetId);
+        if (targetSection) {
+          targetSection.focus();
+          targetSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+
+    // Feedback form submission with FormsPr and live message update
+    const feedbackForm = document.getElementById('feedbackForm');
+    const feedbackResponse = document.getElementById('feedbackResponse');
+
+    feedbackForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(feedbackForm);
+      const action = feedbackForm.getAttribute('action');
+
+      try {
+        const response = await fetch(action, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            Accept: 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          feedbackResponse.style.color = 'green';
+          feedbackResponse.textContent =
+            'Thank you for your feedback! We appreciate your input. 🍽️';
+          feedbackForm.reset();
+        } else {
+          const data = await response.json();
+          feedbackResponse.style.color = 'red';
+          feedbackResponse.textContent =
+            data.errors
+              ? data.errors.map((error) => error.message).join(', ')
+              : 'Oops! There was a problem submitting your feedback.';
+        }
+      } catch (error) {
+        feedbackResponse.style.color = 'red';
+        feedbackResponse.textContent =
+          'Network error: Could not submit feedback. Please try again later.';
+      }
+    });
+  </script>
+</body>
+</html>

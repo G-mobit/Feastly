@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Feedback Page</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f4f8;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 480px;
+      margin: 50px auto;
+      background: white;
+      padding: 25px 30px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+      color: #555;
+    }
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 10px 12px;
+      margin-top: 8px;
+      border: 1.8px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      resize: vertical;
+      transition: border-color 0.3s;
+    }
+    input[type="text"]:focus,
+    textarea:focus {
+      border-color: #0066ff;
+      outline: none;
+    }
+    #starRating {
+      margin-top: 10px;
+      font-size: 2.5rem;
+      color: #ddd;
+      user-select: none;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+
+    }
+    #starRating .fa-star {
+      cursor: pointer;
+      transition: color 0.3s;
+     transition: all ease-in-out 0.3s;
+    }
+    #starRating .fa-star:hover{
+      scale: 1.1;
+    }
+    #starRating .fa-star.selected {
+      color: #ffca28;
+    }
+    #emojiReaction {
+      font-size: 2.5rem;
+      text-align: center;
+      margin-top: 15px;
+      min-height: 50px;
+      color: #444;
+            transition: all ease-in-out 0.5s;
+    }
+    button {
+      background-color: #0066ff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 20px;
+      margin-top: 25px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      width: 100%;
+      cursor: pointer;
+      transition: background-color 0.25s;
+    }
+    button:hover {
+      background-color: #004bb5;
+    }
+    .alert {
+      color: #d93025;
+      font-weight: 600;
+      text-align: center;
+      margin-top: 15px;
+      display: none;
+    }
+    .success-msg {
+      color: #2e7d32;
+      font-weight: 600;
+      text-align: center;
+      margin-top: 15px;
+      display: none;
+    }
+    #emojiReaction:hover{
+      scale: 1.06;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <div class="container" role="main" aria-label="Feedback form">
+    <h1>Rate Our Service</h1>
+    <h4>if you don't like so you can rate</h4>
+    <h3>We will try to resolve it !</h3>
+
+    <form id="feedbackForm">
+      <label for="feedbackName">Your Name</label>
+      <input type="text" id="feedbackName" name="name" placeholder="Enter your name" required />
+
+      <label>Rate us</label>
+      <div id="starRating">
+        <i class="fa fa-star" data-value="1"></i>
+        <i class="fa fa-star" data-value="2"></i>
+        <i class="fa fa-star" data-value="3"></i>
+        <i class="fa fa-star" data-value="4"></i>
+        <i class="fa fa-star" data-value="5"></i>
+      </div>
+
+      <div id="emojiReaction"></div>
+
+      <label for="feedbackComment">Your Comments</label>
+      <textarea id="feedbackComment" name="comment" rows="4" placeholder="Write your feedback (optional)"></textarea>
+
+      <input type="hidden" name="rating" id="hiddenRating" />
+      <input type="hidden" name="submittedAt" id="submittedAt" />
+
+      <button type="submit">Submit Feedback</button>
+    </form>
+
+    <div class="alert" id="errorMsg"></div>
+    <div class="success-msg" id="successMsg">Thank you for your feedback! Redirecting...</div>
+  </div>
+
+  <script>
+    const stars = document.querySelectorAll('#starRating .fa-star');
+    const emojiDiv = document.getElementById('emojiReaction');
+    const hiddenRating = document.getElementById('hiddenRating');
+    const submittedAt = document.getElementById('submittedAt');
+    const errorMsg = document.getElementById('errorMsg');
+    const successMsg = document.getElementById('successMsg');
+    const form = document.getElementById('feedbackForm');
+    let selectedRating = 0;
+
+    function updateEmoji(rating) {
+      const moods = {
+        1: '😞 Very very sad',
+        2: '😟 Very sad',
+        3: '😕 Sad',
+        4: '🙂 Less happy',
+        5: '😁 Very happy!'
+      };
+      emojiDiv.textContent = moods[rating] || '';
+    }
+
+    function selectRating(rating) {
+      selectedRating = rating;
+      hiddenRating.value = rating;
+      stars.forEach((star, i) => {
+        star.classList.toggle('selected', i < rating);
+      });
+      updateEmoji(rating);
+    }
+
+    stars.forEach(star => {
+      star.addEventListener('click', () => {
+        const rating = parseInt(star.getAttribute('data-value'));
+        selectRating(rating);
+      });
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById('feedbackName').value.trim();
+      const comment = document.getElementById('feedbackComment').value.trim();
+
+      if (!name) {
+        errorMsg.textContent = "Please enter your name.";
+        errorMsg.style.display = "block";
+        return;
+      }
+      if (selectedRating === 0) {
+        errorMsg.textContent = "Please select a star rating.";
+        errorMsg.style.display = "block";
+        return;
+      }
+
+      errorMsg.style.display = "none";
+      submittedAt.value = new Date().toISOString();
+
+      // Send data to Formspree
+      fetch('https://formspree.io/f/mpwrnzyg', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: name,
+          comment: comment,
+          rating: selectedRating,
+          submittedAt: submittedAt.value
+        })
+      }).then(res => {
+        if (res.ok) {
+          successMsg.style.display = "block";
+          setTimeout(() => {
+            window.location.href = "index.html"; // 👈 redirect after 3 sec
+          }, 3000);
+          form.reset();
+          selectRating(0);
+        } else {
+          throw new Error("Network error");
+        }
+      }).catch(err => {
+        errorMsg.textContent = "Something went wrong. Try again later.";
+        errorMsg.style.display = "block";
+      });
+    });
+
+    selectRating(0);
+  </script>
+</body>
+</html>

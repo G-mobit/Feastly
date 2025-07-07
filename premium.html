@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Feastly Premium</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    .top-bar { background: #333; color: #fff; text-align: center; padding: 10px; }
+    .premium-btn { background: gold; color: #000; padding: 6px 12px; border-radius: 5px; font-weight: bold; text-decoration: none; margin-left: 15px; }
+    .premium-benefits { background: #fffbe6; padding: 30px; max-width: 700px; margin: 30px auto; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+    .premium-benefits ul { list-style: none; padding: 0; }
+    .premium-benefits li { margin: 10px 0; font-size: 16px; }
+    #rzp-button1 { background: #ffcc00; color: #000; padding: 12px 24px; border: none; border-radius: 5px; font-weight: bold; margin: 20px auto; cursor: pointer; display: block; }
+    .ad-box, .congrats-message, #expiredMessage { max-width: 600px; margin: 20px auto; padding: 15px; text-align: center; }
+    .ad-box { background: #fff4f4; border: 1px dashed red; }
+    .ad-box button { padding: 5px 10px; cursor: pointer; background: #ccc; border: none; border-radius: 4px; }
+    .congrats-message { color: green; font-weight: bold; }
+    #expiredMessage { color: red; font-weight: bold; display: none; }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    Welcome to Feastly! <a href="#premium" class="premium-btn" id="premiumButton">🌟 Go Premium</a>
+  </div>
+
+  <section id="premium" class="premium-benefits">
+    <h2>Why Go Premium?</h2>
+    <ul>
+      <li>✅Dedicated video Access in each Recipe</li>
+      <li>✅ Ad-Free Experience</li>
+      <li>✅ Exclusive & Early Access</li>
+      <li>✅ Download Recipes as PDF</li>
+      <li>✅ Chef’s Secret Tips</li>
+      <li>✅ Priority Support</li>
+      <li>✅ New Features Every Month</li>
+      <li>✅ Personalized Meal Plans</li>
+      <li>✅ Grocery List Integration</li>
+      <li>✅ Smart Recipe Recommendations</li>
+      <li>✅ Community Challenges & Rewards</li>
+      <li>✅ Access to Live Cooking Classes</li>
+      <li>✅ Augmented Reality Cooking Guides</li>
+    </ul>
+    <!-- The subscribe button ALWAYS stays visible -->
+    <button id="rzp-button1">Subscribe ₹99/month</button>
+  </section>
+
+  <section id="premiumCongrats" class="premium-benefits" style="display: none;">
+    <h2>🎉 You're a Premium Member!</h2>
+    <p class="congrats-message">Thank you for supporting Feastly. You're awesome! 💖</p>
+    <ul>
+      <li>✅Dedicated video Access in each Recipe</li>
+      <li>✅ Ad-Free Experience</li>
+      <li>✅ Early & Exclusive Access</li>
+      <li>✅ Personalized Meal Plans</li>
+      <li>✅ Download Recipes as PDF</li>
+      <li>✅ Grocery List Integration</li>
+      <li>✅ Smart Recipe Recommendations</li>
+      <li>✅ Live Cooking Classes & More</li>
+    </ul>
+  </section>
+
+  <div id="expiredMessage">⚠️ Your premium has expired. Please subscribe again to continue enjoying premium features.</div>
+
+  <div class="ad-box" id="adArea">
+    <div id="adContent">
+      🔔 Ad: Buy premium now! Only ₹99/month.
+      <button onclick="hideAdTemporarily()">❌ CUT</button>
+    </div>
+    <div id="thankContent" style="display:none;">
+      <p class="congrats-message">🎉 Congratulations! Premium Activated!</p>
+      <p>Thanks for supporting. Enjoy premium features!</p>
+    </div>
+  </div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  const KV = {
+    isPremium: "isPremiumUser",
+    premiumDate: "premiumPurchaseDate"
+  };
+
+  // Razorpay config
+  const rzpOptions = {
+    key: "rzp_test_93ROt8cBtlgYXK",
+    amount: "9900",
+    currency: "INR",
+    name: "Feastly Premium",
+    description: "Access all premium features",
+    handler: function () {
+      const now = new Date().toISOString();
+      localStorage.setItem(KV.isPremium, "true");
+      localStorage.setItem(KV.premiumDate, now);
+      showPremiumUI();
+      alert("🎉 Premium Activated!");
+    },
+    modal: {
+      ondismiss: () => alert("Payment not completed.")
+    },
+    theme: { color: "#ffcc00" }
+  };
+
+  const rzp = new Razorpay(rzpOptions);
+
+  document.getElementById("rzp-button1").onclick = (e) => {
+    e.preventDefault();
+    rzp.open();
+  };
+
+  // Check if premium is still valid (testing: 3 mins, change to 43200 for 30 days)
+  function isPremiumValid() {
+    const dateStr = localStorage.getItem(KV.premiumDate);
+    if (!dateStr) return false;
+    const purchaseDate = new Date(dateStr);
+    const now = new Date();
+    const diffMinutes = (now - purchaseDate) / (1000 * 60);
+    return diffMinutes <= 3; // change to 43200 for 30 days in production
+  }
+
+  function showPremiumUI() {
+    // Hide ads and show thank you
+    const adContent = document.getElementById("adContent");
+    if (adContent) adContent.style.display = "none";
+
+    const thankContent = document.getElementById("thankContent");
+    if (thankContent) thankContent.style.display = "block";
+
+    // Hide expired message if visible
+    const expiredMsg = document.getElementById("expiredMessage");
+    if (expiredMsg) expiredMsg.style.display = "none";
+
+    // Show congrats message
+    const congratsSection = document.getElementById("premiumCongrats");
+    if (congratsSection) congratsSection.style.display = "block";
+
+    // Keep the premium benefits section visible (so Subscribe button stays)
+    // Optionally you can hide premium benefits ul if you want
+
+    // The subscribe button (#rzp-button1) stays visible always (no hide)
+  }
+
+  function showExpiredMessage() {
+    const expiredMsg = document.getElementById("expiredMessage");
+    if (expiredMsg) expiredMsg.style.display = "block";
+
+    // Show premium section so subscribe button visible
+    const premiumSection = document.getElementById("premium");
+    if (premiumSection) premiumSection.style.display = "block";
+
+    // Hide congrats message because user is not premium
+    const congratsSection = document.getElementById("premiumCongrats");
+    if (congratsSection) congratsSection.style.display = "none";
+
+    // Show ads again
+    const adContent = document.getElementById("adContent");
+    if (adContent) adContent.style.display = "block";
+
+    const thankContent = document.getElementById("thankContent");
+    if (thankContent) thankContent.style.display = "none";
+  }
+
+  // Hide ads temporarily
+  function hideAdTemporarily() {
+    const adArea = document.getElementById("adArea");
+    if (adArea) adArea.style.display = "none";
+    setTimeout(() => {
+      if (localStorage.getItem(KV.isPremium) !== "true" || !isPremiumValid()) {
+        if (adArea) adArea.style.display = "block";
+      }
+    }, 60000);
+  }
+
+  // On page load, check premium status and update UI accordingly
+  window.addEventListener("DOMContentLoaded", () => {
+    const isPremium = localStorage.getItem(KV.isPremium) === "true";
+    if (isPremium && isPremiumValid()) {
+      showPremiumUI();
+    } else {
+      // premium expired or not purchased
+      localStorage.removeItem(KV.isPremium);
+      localStorage.removeItem(KV.premiumDate);
+      showExpiredMessage();
+    }
+  });
+</script>
+
+</body>
+</html>

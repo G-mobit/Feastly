@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Feastly</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<style>
+/* Reset & base */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background: #fafafa;
+  color: #2a2a2a;
+  line-height: 1.6;
+}
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; }
+
+/* Header */
+header {
+  background: #000000;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+header .title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+   
+
+
+}
+header .logo { height: 48px; width: auto;transition: all 0.3s ease; }
+.title {
+  position: relative;
+
+  transition: color 0.3s ease;
+}
+.title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background-color: #facc15;
+  transition: width 0.3s ease;
+}
+.title:hover {
+  color: #facc15;
+}
+.title:hover::after {
+  width: 100%;
+}
+
+.logo:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 8px #facc15);
+}
+/* Language selector */
+#languageSelect {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  background: #0366d6;
+  color: #fff;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+#languageSelect:hover { background: #0050a3; }
+
+/* Premium CTA */
+.premium-container {
+  text-align: center;
+  margin: 1rem auto;
+}
+.go-premium-btn {
+  background: linear-gradient(135deg,#f6d365,#fda085);
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 30px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.go-premium-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+
+#categorySection {
+  background: #f8fafc; /* soft off-white */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  max-width: 900px;
+  margin: 3rem auto;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #222;
+}
+
+#categorySection button {
+  background: #fff;
+  border: 2px solid #007acc;
+  padding: 0.65rem 1.8rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #007acc;
+  cursor: pointer;
+  transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 2px 6px rgb(0 122 204 / 0.15);
+}
+
+#categorySection button:hover {
+  background-color: #007acc;
+  color: #fff;
+  box-shadow: 0 4px 12px rgb(0 122 204 / 0.3);
+}
+
+#categorySection button.active {
+  background-color: #005f99;
+  color: #fff;
+  border-color: #004d80;
+  box-shadow: 0 6px 16px rgb(0 79 128 / 0.4);
+}
+
+@media (max-width: 600px) {
+  #categorySection {
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+  }
+  #categorySection button {
+    width: 100%;
+    max-width: 320px;
+  }
+}
+
+/* Search */
+#searchForm {
+  display: flex;
+  justify-content: center;
+  margin: 1.25rem 1rem;
+}
+#searchInput {
+  width: 320px;
+  max-width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #ddd;
+  border-radius: 4px 0 0 4px;
+  transition: border-color 0.2s;
+}
+#searchInput:focus {
+  outline: none;
+  border-color: #1f6feb;
+}
+#searchBtn {
+  padding: 0.75rem 1.25rem;
+  border: 2px solid #1f6feb;
+  border-left: none;
+  background: #1f6feb;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#searchBtn:hover { background: #1666c1; }
+
+/* Recipe Grid */
+#recipeGrid {
+  display: grid;
+  gap: 1.5rem;
+  padding: 0 1rem 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px,1fr));
+}
+.recipe-card {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.recipe-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+.thumbnail {
+  display: block;
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+.recipe-info {
+  padding: 1rem;
+}
+.recipe-info h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+.recipe-info p {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 0.3rem;
+}
+
+/* Video section */
+.video-section {
+  background: #f2f8ff;
+  text-align: center;
+  padding: 0.75rem;
+  border-top: 1px solid #e6ecf0;
+}
+.video-label {
+  font-style: italic;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+.video-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+.video-wrapper img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  display: block;
+}
+.play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  background: rgba(255,255,255,0.9);
+  border: none;
+  border-radius: 50%;
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  color: #1f6feb;
+}
+
+/* Footer */
+footer {
+  background: #24292e;
+  color: #bbb;
+  padding: 2rem 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  height: 475px;
+}
+footer a {
+  margin: 0 0.5rem;
+  color: #79b8ff;
+}
+footer a:hover { color: #a5d6ff; }
+
+/* Rate popup overlay */
+#ratePopupOverlay {
+  position: fixed; top:0; left:0; width:100%; height:100%;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+#ratePopup {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  max-width: 90%;
+  width: 360px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  text-align: center;
+}
+#ratePopup .close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #555;
+  cursor: pointer;
+}
+#ratePopup h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+#ratePopup p {
+  color: #555;
+  margin-bottom: 1.25rem;
+}
+#ratePopup .popup-buttons {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+#ratePopup button {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.rate-btn {
+  background: #28a745;
+  color: #fff;
+}
+.later-btn {
+  background: #e1e4e8;
+  color: #24292e;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .recipe-info h3 { font-size: 1rem; }
+  .video-wrapper img { height: 140px; }
+}
+@media (max-width: 420px) {
+  header { flex-direction: column; gap: 0.5rem; }
+  .premium-container { margin: 0.5rem auto; }
+  #searchForm { flex-direction: column; gap: 0.5rem; margin: 1rem; }
+}
+.footer-extra {
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  color: #aaa;
+}
+
+.footer-extra p {
+  margin: 0.2rem 0;
+}
+
+.footer-newsletter {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #232f3e;
+  border-radius: 10px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.footer-newsletter h4 {
+  color: #febd69;
+  margin-bottom: 10px;
+}
+
+.footer-newsletter p {
+  color: #ccc;
+  margin-bottom: 15px;
+  font-size: 0.95rem;
+}
+
+.footer-newsletter form {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.footer-newsletter input[type="email"] {
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  flex: 1;
+  min-width: 200px;
+}
+
+.footer-newsletter button {
+  background-color: #febd69;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.footer-newsletter button:hover {
+  background-color: #f3a847;
+}
+.back-to-top {
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000000;
+    transition:all ease-in-out 0.2s;
+}
+
+.back-to-top a {
+  color: #febd69;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+.back-to-top:hover{
+  background-color: #1c1c1c;
+}
+.back-to-top a:hover {
+  color: #fff;
+
+}
+.title {
+  position: relative;
+  display: inline-block;
+  transition: color 0.3s ease;
+}
+.title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background-color: #facc15;
+  transition: width 0.3s ease;
+}
+.title:hover {
+  color: #facc15;
+}
+.title:hover::after {
+  width: 100%;
+}
+.footer-hours {
+  max-width: 400px;
+  margin: 0 auto 40px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.footer-hours h4 {
+  color: #2980b9;
+  margin-bottom: 12px;
+}
+
+/* Super bright working hours */
+.footer-hours .working {
+  color: #ff0000;   /* Bright red (you can pick any bright color) */
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* Dull non-working hours */
+.footer-hours .non-working {
+  color: #888888;   /* Dull gray */
+  font-weight: 400;
+  font-size: 0.95rem;
+}
+.footer-hours {
+  max-width: 400px;
+  margin: 0 auto 40px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.footer-hours h4 {
+  color: #2980b9;
+  margin-bottom: 12px;
+}
+
+/* Super bright working hours */
+.footer-hours .working {
+  color: #15ff00;   /* Bright red (you can pick any bright color) */
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* Dull non-working hours */
+.footer-hours .non-working {
+  color: #ff0000;   /* Dull gray */
+  font-weight: 400;
+  font-size: 0.95rem;
+}
+
+#goToBottomBtn {
+  position: fixed;
+  right: 20px;
+  bottom: 80px;  /* above back to top if you have it */
+  padding: 12px 18px;
+  background-color: #2980b9;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+  transition: background-color 0.3s ease;
+  z-index: 1000;
+}
+
+#goToBottomBtn:hover,
+#goToBottomBtn:focus {
+  background-color: #1c5980;
+  outline: none;
+}
+ .professional-button {
+  margin: 10px;
+      padding: 14px 28px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      background-color: #007BFF;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .professional-button:hover {
+      background-color: #0056b3;
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .professional-button:active {
+      background-color: #004494;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  
+      background: #f9f9f9;
+    }
+    strong{
+      font-weight: bolder;
+      text-decoration: wavy;
+      text-transform: capitalize;
+     
+    
+    }
+    .red{
+      color: red;
+    }
+    .yellow{
+      color: orangered;
+    }
+    .blue{
+
+      color: blue;
+    }
+  </style>
+</style>
+
+<link rel="icon" href="Untitled-1.jpg" type="image/x-icon">
+</head>
+<body>
+
+<header>
+  <div class="title">
+    <img src="Untitled-1.jpg" alt="Feastly Logo"class="logo" />
+    <h1 id="title">Feastly</h1>
+  </div>
+  <select id="languageSelect" aria-label="Select Language">
+    <option value="en" selected>English</option>
+    <option value="es">Español  (Spanish)</option>
+    <option value="fr">Français (French)</option>
+    <option value="hi">हिन्दी     (Hindi)</option>
+    <option value="zh">中文     (Chinese)</option>
+    
+  </select>
+  <button id="goToBottomBtn" aria-label="Go to bottom of page">More information ⬇️</button>
+
+</header>
+<div class="premium-container">
+  <button class="go-premium-btn" id="goPremiumBtn">Go Premium</button>
+</div>
+
+
+
+<div id="categorySection">
+  <button data-cat="Breakfast" class="active" id="cat-breakfast">Breakfast</button>
+  <button data-cat="Lunch" id="cat-lunch">Lunch</button>
+  <button data-cat="Dinner" id="cat-dinner">Dinner</button>
+  <button data-cat="Dessert" id="cat-dessert">Dessert</button>
+</div>
+
+<form id="searchForm" role="search">
+  <input id="searchInput" placeholder="Search recipes..." aria-label="Search recipes" />
+  <button type="submit" id="searchBtn">Search</button>
+</form>
+
+<div id="recipeGrid" aria-live="polite" aria-label="Recipe results"></div>
+<div class="back-to-top">
+  <a href="#top" aria-label="Back to top"><i class="fas fa-chevron-up"></i> Back to Top</a>
+</div>
+
+<footer>
+  <p>
+    <a href="about.html" id="footer-about">About Us</a> |
+    <a href="privacy.html" id="footer-privacy">Privacy and Policy</a> |
+    <a href="terms.html" id="footer-terms">Terms & Conditions</a> |
+    <a href="disclaimer.html" id="footer-disclaimer">Disclaimer</a> |
+    <a href="founder.html" id="footer-founder">Founder</a> |
+    <a href="contact.html" id="footer-contact">Need help</a> |
+    <a href="feedback.html" id="footer-rate">Rate Us</a> |
+    <a href="help.html" id="footer-help">Need Help</a>
+  </p>
+
+  
+<div class="footer-hours" aria-label="Customer Support Operating Hours">
+  <h4>Customer Support Hours</h4>
+
+  <p>
+    <span class="non-working">Monday – Friday: 9:25 AM – 2:40 PM (Non-working hours)</span><br />
+    <span class="working">Monday – Friday: Support available for 5 hours mins 20 (2:40 PM – 8:00 PM)</span>
+  </p>
+
+  <p>
+    <span class="non-working">Saturday, Sunday & Festivals: All other times except below (Non-working hours)</span><br />
+    <span class="working">Saturday, Sunday & Festivals: Support available for 2 hours (11:00 AM – 1:00 PM)</span>
+  </p>
+</div>
+
+
+
+
+  <div class="footer-extra">
+    <p>&copy; 2025 Feastly. All rights reserved.</p>
+    <p>Crafted with ❤️ to bring recipes from around the world to your kitchen.</p>
+  </div>
+</footer>
+
+
+<script>
+  // Scroll to bottom button
+  document.getElementById('goToBottomBtn').addEventListener('click', () => {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: 'smooth'
+    });
+  });
+
+  const buttons = document.querySelectorAll('#categorySection button');
+  const grid = document.getElementById('recipeGrid');
+  const searchForm = document.getElementById('searchForm');
+  const searchInput = document.getElementById('searchInput');
+  const languageSelect = document.getElementById('languageSelect');
+  const goPremiumBtn = document.getElementById('goPremiumBtn');
+
+  goPremiumBtn.addEventListener('click', () => {
+    window.location.href = 'premium.html';
+  });
+
+  const categoryMap = {
+    Breakfast: 'Breakfast',
+    Lunch: 'Chicken',
+    Dinner: 'Vegetarian',
+    Dessert: 'Dessert'
+  };
+
+  const LANGS = {
+    English: {
+      title: "Feastly",
+      categories: { Breakfast: "Breakfast", Lunch: "Lunch", Dinner: "Dinner", Dessert: "Dessert" },
+      searchPlaceholder: "Search recipes...",
+      searchBtn: "Search",
+      videoLabel: "This is a dedicated video",
+      noRecipes: "No recipes found.",
+      loading: "Loading...",
+      searching: "Searching...",
+      footer: {
+        about: "About Us",
+        privacy: "Privacy and Policy",
+        terms: "Terms & Conditions",
+        disclaimer: "Disclaimer",
+        founder: "Founder",
+        contact: "Contact Us",
+        rate: "Rate Us"
+      }
+    },
+    'Español (Spanish)': {
+      title: "Feastly",
+      categories: { Breakfast: "Desayuno", Lunch: "Almuerzo", Dinner: "Cena", Dessert: "Postre" },
+      searchPlaceholder: "Buscar recetas...",
+      searchBtn: "Buscar",
+      videoLabel: "Este es un video dedicado",
+      noRecipes: "No se encontraron recetas.",
+      loading: "Cargando...",
+      searching: "Buscando...",
+      footer: {
+        about: "Sobre Nosotros",
+        privacy: "Privacidad y Política",
+        terms: "Términos y Condiciones",
+        disclaimer: "Descargo de responsabilidad",
+        founder: "Fundador",
+        contact: "Contáctanos",
+        rate: "Califícanos"
+      }
+    },
+    fr: {
+      title: "Feastly",
+      categories: { Breakfast: "Petit-déjeuner", Lunch: "Déjeuner", Dinner: "Dîner", Dessert: "Dessert" },
+      searchPlaceholder: "Rechercher des recettes...",
+      searchBtn: "Rechercher",
+      videoLabel: "Ceci est une vidéo dédiée",
+      noRecipes: "Aucune recette trouvée.",
+      loading: "Chargement...",
+      searching: "Recherche...",
+      footer: {
+        about: "À propos",
+        privacy: "Politique de confidentialité",
+        terms: "Conditions générales",
+        disclaimer: "Clause de non-responsabilité",
+        founder: "Fondateur",
+        contact: "Contactez-nous",
+        rate: "Évaluez-nous"
+      }
+    }
+  };
+
+  const availableLanguages = Object.keys(LANGS);
+
+  // Populate language dropdown
+  function populateLanguages() {
+    languageSelect.innerHTML = '';
+    availableLanguages.forEach(lang => {
+      const option = document.createElement('option');
+      option.value = lang;
+      option.textContent = lang.toUpperCase();
+      languageSelect.appendChild(option);
+    });
+  }
+
+  // Get UI text from dictionary
+  function getText(lang, keyPath) {
+    const keys = keyPath.split('.');
+    let val = LANGS[lang];
+    for (const k of keys) {
+      if (!val || !val[k]) {
+        val = LANGS['English']; // fallback to English
+        for (const k2 of keys) val = val ? val[k2] : null;
+        return val || keyPath;
+      }
+      val = val[k];
+    }
+    return val;
+  }
+
+  function updateLanguageTexts(lang) {
+    document.getElementById('title').textContent = getText(lang, 'title');
+    buttons.forEach(btn => {
+      btn.textContent = getText(lang, `categories.${btn.dataset.cat}`);
+    });
+    searchInput.placeholder = getText(lang, 'searchPlaceholder');
+    document.getElementById('searchBtn').textContent = getText(lang, 'searchBtn');
+    document.getElementById('footer-about').textContent = getText(lang, 'footer.about');
+    document.getElementById('footer-privacy').textContent = getText(lang, 'footer.privacy');
+    document.getElementById('footer-terms').textContent = getText(lang, 'footer.terms');
+    document.getElementById('footer-disclaimer').textContent = getText(lang, 'footer.disclaimer');
+    document.getElementById('footer-founder').textContent = getText(lang, 'footer.founder');
+    document.getElementById('footer-contact').textContent = getText(lang, 'footer.contact');
+    document.getElementById('footer-rate').textContent = getText(lang, 'footer.rate');
+  }
+
+  const KV = {
+    firstVisit: 'firstVisit',
+    usedFree: 'usedFreeVideo',
+    isPremium: 'isPremiumUser',
+    premiumDate: 'premiumPurchaseDate',
+    lastRate: 'lastRatePopup',
+    preferredLang: 'preferredLanguage'
+  };
+
+  if (!localStorage.getItem(KV.firstVisit)) {
+    localStorage.setItem(KV.firstVisit, new Date().toISOString());
+  }
+
+  function isWithinOneMonth(key) {
+    const t = localStorage.getItem(key);
+    return t && (Date.now() - new Date(t).getTime()) < 30 * 24 * 60 * 60 * 1000; // 30 days in ms
+  }
+
+  function isPremium() {
+    return localStorage.getItem(KV.isPremium) === 'true' && isWithinOneMonth(KV.premiumDate);
+  }
+
+  function hasUsedFreeVideo() {
+    return localStorage.getItem(KV.usedFree) === 'true';
+  }
+
+  function markUsedFreeVideo() {
+    localStorage.setItem(KV.usedFree, 'true');
+  }
+
+  (function () {
+    const last = localStorage.getItem(KV.lastRate);
+    if (!last || Date.now() - new Date(last).getTime() > 86400000) {
+      setTimeout(() => {
+        if (confirm('Please rate us! Your feedback matters—go to feedback?')) {
+          window.location.href = 'feedback.html';
+        }
+        localStorage.setItem(KV.lastRate, new Date().toISOString());
+      }, 1500);
+    }
+  })();
+
+  let searchCount = 0;
+  function maybeShowAd() {
+    if (!isPremium() && ++searchCount % 5 === 0) {
+      alert('Advertisement: Upgrade to Premium for ad-free & unlimited videos!');
+    }
+  }
+
+  function renderRecipes(meals) {
+    if (!meals || meals.length === 0) {
+      grid.innerHTML = `<p style="grid-column:1/-1; text-align:center;">${getText(languageSelect.value, 'noRecipes')}</p>`;
+      return;
+    }
+
+    grid.innerHTML = meals.map(meal => {
+      const videoId = meal.strYoutube?.includes('v=') ? meal.strYoutube.split('v=')[1].split('&')[0] : '';
+      return `
+        <article class="recipe-card" aria-label="${meal.strMeal}">
+          <img src="${meal.strMealThumb}" alt="${meal.strMeal}" class="thumbnail" />
+          <div class="recipe-info">
+            <h3>${meal.strMeal}</h3>
+            <p><strong>Category:</strong> ${meal.strCategory}</p>
+            <p><strong>Origin:</strong> ${meal.strArea}</p>
+              <div class="button-container">
+    <button class="professional-button" onclick="window.location.href='coming.html'">
+    Check lowest price ₹,$ in <strong class="red">ZOMATO</strong>,<strong class="yellow">SWIGGY</strong> and <strong class="blue">DOMINO's</strong>
+    for this recipe
+          </div>
+          <div class="video-section">
+            <span class="video-label">${getText(languageSelect.value, 'videoLabel')}</span>
+            <div class="video-wrapper" tabindex="0" role="button" aria-label="Play video of ${meal.strMeal}" data-vid="${videoId}">
+              <img src="${meal.strMealThumb}" alt="Video thumbnail for ${meal.strMeal}" />
+              <button class="play-btn" aria-label="Play Video"><i class="fas fa-play"></i></button>
+            </div>
+          </div>
+        </article>
+      `;
+    }).join('');
+
+    document.querySelectorAll('.play-btn').forEach(btn => {
+      btn.onclick = e => {
+        e.stopPropagation();
+        const vid = btn.closest('.video-wrapper').dataset.vid;
+        if (!vid) {
+          alert('No video available for this recipe.');
+          return;
+        }
+        if (!isPremium() && hasUsedFreeVideo()) {
+          window.location.href = 'premium.html';
+        } else {
+          if (!isPremium()) markUsedFreeVideo();
+          window.open(`https://www.youtube.com/watch?v=${vid}`, '_blank');
+        }
+      };
+    });
+
+    document.querySelectorAll('.video-wrapper').forEach(div => {
+      div.onclick = e => div.querySelector('.play-btn').click();
+    });
+  }
+
+  async function fetchMealsByCategory(categoryKey) {
+    const apiCategory = categoryMap[categoryKey] || categoryKey;
+    grid.innerHTML = `<p style="grid-column:1/-1; text-align:center;">${getText(languageSelect.value, 'loading')}</p>`;
+    try {
+      const res = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${apiCategory}`);
+      const data = await res.json();
+      if (data.meals) {
+        const detailsPromises = data.meals.map(m => fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${m.idMeal}`).then(r => r.json()));
+        const details = await Promise.all(detailsPromises);
+        const meals = details.map(d => d.meals[0]);
+        renderRecipes(meals);
+      } else {
+        renderRecipes([]);
+      }
+    } catch (error) {
+      renderRecipes([]);
+    }
+  }
+
+  async function fetchMealsBySearch(term) {
+    grid.innerHTML = `<p style="grid-column:1/-1; text-align:center;">${getText(languageSelect.value, 'searching')}</p>`;
+    maybeShowAd();
+
+    try {
+      const res = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${encodeURIComponent(term)}`);
+      const data = await res.json();
+      if (data.meals) {
+        renderRecipes(data.meals);
+      } else {
+        renderRecipes([]);
+      }
+    } catch (error) {
+      renderRecipes([]);
+    }
+  }
+
+  languageSelect.addEventListener('change', () => {
+    const lang = languageSelect.value;
+    localStorage.setItem(KV.preferredLang, lang);
+    updateLanguageTexts(lang);
+  });
+
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      // Remove 'active' from all buttons
+      buttons.forEach(btn => btn.classList.remove('active'));
+      // Add 'active' only to the clicked button
+      button.classList.add('active');
+      // Fetch meals for the selected category
+      fetchMealsByCategory(button.dataset.cat);
+    });
+  });
+
+  searchForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const term = searchInput.value.trim();
+    if (!term) return;
+    buttons.forEach(btn => btn.classList.remove('active'));
+    fetchMealsBySearch(term);
+  });
+
+  // Initialize page
+  populateLanguages();
+
+  const savedLang = localStorage.getItem(KV.preferredLang);
+  if (savedLang && availableLanguages.includes(savedLang)) {
+    languageSelect.value = savedLang;
+  } else {
+    languageSelect.value = 'English';
+  }
+  updateLanguageTexts(languageSelect.value);
+
+  // Default load category (Breakfast)
+  fetchMealsByCategory('Breakfast');
+</script>
+
+
+</body>
+</html>
